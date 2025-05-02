@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Haz clic en el círculo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 30px;
+      background: #f0f8ff;
+    }
+
+    #game-area {
+      width: 400px;
+      height: 400px;
+      margin: 20px auto;
+      position: relative;
+      border: 2px solid #000;
+      background: #e0ffff;
+    }
+
+    .circle {
+      width: 50px;
+      height: 50px;
+      background-color: crimson;
+      border-radius: 50%;
+      position: absolute;
+      cursor: pointer;
+    }
+
+    #score, #time {
+      font-size: 24px;
+      margin: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>¡Haz clic en el círculo!</h1>
+  <div id="score">Puntos: 0</div>
+  <div id="time">Tiempo: 10</div>
+  <div id="game-area"></div>
+
+  <script>
+    const gameArea = document.getElementById("game-area");
+    const scoreDisplay = document.getElementById("score");
+    const timeDisplay = document.getElementById("time");
+
+    let score = 0;
+    let timeLeft = 10;
+    let timer;
+    let circle;
+
+    function getRandomPosition() {
+      const x = Math.floor(Math.random() * 350);
+      const y = Math.floor(Math.random() * 350);
+      return { x, y };
+    }
+
+    function createCircle() {
+      if (circle) gameArea.removeChild(circle);
+
+      circle = document.createElement("div");
+      circle.classList.add("circle");
+
+      const pos = getRandomPosition();
+      circle.style.left = `${pos.x}px`;
+      circle.style.top = `${pos.y}px`;
+
+      circle.addEventListener("click", () => {
+        score++;
+        scoreDisplay.textContent = `Puntos: ${score}`;
+        createCircle();
+      });
+
+      gameArea.appendChild(circle);
+    }
+
+    function startGame() {
+      createCircle();
+      timer = setInterval(() => {
+        timeLeft--;
+        timeDisplay.textContent = `Tiempo: ${timeLeft}`;
+        if (timeLeft === 0) {
+          clearInterval(timer);
+          gameArea.innerHTML = "";
+          alert(`¡Tiempo terminado! Tu puntuación fue: ${score}`);
+        }
+      }, 1000);
+    }
+
+    startGame();
+  </script>
+
+</body>
+</html>
